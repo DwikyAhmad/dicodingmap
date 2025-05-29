@@ -97,6 +97,16 @@ class App {
             this.components.set('authUtils', authUtils);
         }
 
+        // Initialize camera utilities
+        if (window.cameraUtils) {
+            this.components.set('cameraUtils', cameraUtils);
+        }
+
+        // Initialize map utilities
+        if (window.mapUtils) {
+            this.components.set('mapUtils', mapUtils);
+        }
+
         // Initialize models
         if (window.storyModel) {
             this.components.set('storyModel', storyModel);

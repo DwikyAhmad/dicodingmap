@@ -149,23 +149,36 @@ class AddStoryPresenter {
                 throw new Error('Camera section not found');
             }
 
+            console.log('Camera section found:', cameraSection);
+            console.log('CameraUtils available:', typeof cameraUtils);
+            console.log('CameraUtils.initCamera available:', typeof cameraUtils.initCamera);
+
+            // Check if camera is supported
+            if (!cameraUtils.isCameraSupported()) {
+                throw new Error('Camera tidak didukung di browser ini');
+            }
+
+            console.log('Camera is supported, initializing...');
+
             // Initialize camera UI using camera utility
             this.cameraInstance = await cameraUtils.initCamera(cameraSection, {
                 onCapture: (imageBlob) => {
+                    console.log('Camera onCapture callback called with blob:', imageBlob);
                     this.handleImageCapture(imageBlob);
                 },
                 onError: (error) => {
+                    console.log('Camera onError callback called with error:', error);
                     this.handleCameraError(error);
                 },
                 maxSize: 1024 * 1024, // 1MB max
                 allowGallery: true
             });
 
-            console.log('Camera initialized successfully');
+            console.log('Camera initialized successfully, instance:', this.cameraInstance);
 
         } catch (error) {
             console.error('Error initializing camera:', error);
-            this.showCameraError('Gagal menginisialisasi kamera');
+            this.showCameraError(`Gagal menginisialisasi kamera: ${error.message}`);
         }
     }
 
@@ -516,7 +529,7 @@ class AddStoryPresenter {
         // Reset camera
         if (this.cameraInstance) {
             try {
-                cameraUtils.cleanup(this.cameraInstance);
+                this.cameraInstance.cleanup();
             } catch (error) {
                 console.error('Error cleaning up camera:', error);
             }
@@ -582,7 +595,7 @@ class AddStoryPresenter {
         // Cleanup camera
         if (this.cameraInstance) {
             try {
-                cameraUtils.cleanup(this.cameraInstance);
+                this.cameraInstance.cleanup();
             } catch (error) {
                 console.error('Error cleaning up camera:', error);
             }

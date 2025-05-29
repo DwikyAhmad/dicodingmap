@@ -3,7 +3,7 @@ class Router {
     constructor() {
         this.routes = new Map();
         this.currentRoute = null;
-        this.defaultRoute = 'home';
+        this.defaultRoute = 'auth';
         this.init();
     }
 
@@ -45,7 +45,16 @@ class Router {
             path: '#',
             title: 'Beranda',
             component: 'home',
-            presenter: () => new HomePresenter(),
+            presenter: () => {
+                // Redirect based on authentication status
+                if (authUtils && authUtils.isAuthenticated()) {
+                    return new HomePresenter();
+                } else {
+                    // This shouldn't be reached due to routing logic, but as fallback
+                    router.navigateTo('auth');
+                    return new AuthPresenter();
+                }
+            },
             requiresAuth: false
         });
     }
@@ -90,8 +99,25 @@ class Router {
             return;
         }
 
-        // Check authentication requirements
-        if (route.requiresAuth && !authUtils.isAuthenticated()) {
+        // Check if user is authenticated
+        const isAuthenticated = authUtils.isAuthenticated();
+        
+        // If user is not authenticated and not trying to access auth page, redirect to auth
+        if (!isAuthenticated && routeName !== 'auth') {
+            console.log('User not authenticated, redirecting to auth page');
+            this.navigateTo('auth');
+            return;
+        }
+
+        // If user is authenticated and trying to access auth page, redirect to home
+        if (isAuthenticated && routeName === 'auth') {
+            console.log('User already authenticated, redirecting to home');
+            this.navigateTo('home');
+            return;
+        }
+
+        // Check authentication requirements (legacy support)
+        if (route.requiresAuth && !isAuthenticated) {
             console.log('Route requires authentication, redirecting to auth page');
             this.navigateTo('auth');
             return;
@@ -191,7 +217,12 @@ class Router {
     // Extract route name from hash
     extractRouteFromHash(hash) {
         if (!hash || hash === '#') {
-            return this.defaultRoute;
+            // Return appropriate default based on authentication status
+            if (authUtils && authUtils.isAuthenticated()) {
+                return 'home';
+            } else {
+                return 'auth';
+            }
         }
         
         return hash.replace('#', '');
@@ -238,16 +269,27 @@ class Router {
 
     // Handle authentication state changes
     handleAuthStateChange(isAuthenticated) {
+        console.log('Auth state changed:', isAuthenticated);
+        
         // Update navigation visibility
         if (window.authUtils) {
             authUtils.updateNavigationLinks();
         }
 
-        // If user logged out and on protected route, redirect
-        if (!isAuthenticated && this.currentRoute) {
-            const route = this.routes.get(this.currentRoute);
-            if (route && route.requiresAuth) {
+        // Handle authentication state changes
+        if (isAuthenticated) {
+            // User just logged in
+            if (this.currentRoute === 'auth') {
+                // If user is on auth page, redirect to home
+                console.log('User authenticated, redirecting from auth to home');
                 this.navigateTo('home');
+            }
+        } else {
+            // User just logged out or is not authenticated
+            if (this.currentRoute !== 'auth') {
+                // If user is not on auth page, redirect to auth
+                console.log('User not authenticated, redirecting to auth page');
+                this.navigateTo('auth');
             }
         }
     }

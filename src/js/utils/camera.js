@@ -173,15 +173,21 @@ class CameraUtils {
         }
     }
 
-    // Initialize camera with UI controls
-    async initializeCameraUI(containerId) {
-        const container = document.getElementById(containerId);
-        if (!container) {
-            throw new Error(`Container dengan ID '${containerId}' tidak ditemukan`);
+    // Initialize camera with custom options and callbacks
+    async initCamera(containerElement, options = {}) {
+        if (!containerElement) {
+            throw new Error('Container element tidak ditemukan');
         }
 
+        const {
+            onCapture = null,
+            onError = null,
+            maxSize = 1024 * 1024, // 1MB default
+            allowGallery = false
+        } = options;
+
         // Create camera UI HTML
-        container.innerHTML = `
+        containerElement.innerHTML = `
             <div class="camera-container">
                 <div class="camera-preview-container">
                     <video id="camera-video" class="camera-preview" autoplay muted playsinline style="display: none;"></video>
@@ -205,6 +211,13 @@ class CameraUtils {
                         <i class="fas fa-stop"></i>
                         Stop Kamera
                     </button>
+                    ${allowGallery ? `
+                        <input type="file" id="gallery-input" accept="image/*" style="display: none;">
+                        <button type="button" id="gallery-btn" class="btn btn-secondary">
+                            <i class="fas fa-images"></i>
+                            Galeri
+                        </button>
+                    ` : ''}
                 </div>
                 <div class="camera-status">
                     <p id="camera-status-text">Klik "Mulai Kamera" untuk mengambil foto</p>
@@ -213,14 +226,57 @@ class CameraUtils {
         `;
 
         // Get UI elements
-        const video = container.querySelector('#camera-video');
-        const canvas = container.querySelector('#camera-canvas');
-        const capturedImage = container.querySelector('#captured-image');
-        const startBtn = container.querySelector('#start-camera-btn');
-        const captureBtn = container.querySelector('#capture-btn');
-        const retakeBtn = container.querySelector('#retake-btn');
-        const stopBtn = container.querySelector('#stop-camera-btn');
-        const statusText = container.querySelector('#camera-status-text');
+        const video = containerElement.querySelector('#camera-video');
+        const canvas = containerElement.querySelector('#camera-canvas');
+        const capturedImage = containerElement.querySelector('#captured-image');
+        const startBtn = containerElement.querySelector('#start-camera-btn');
+        const captureBtn = containerElement.querySelector('#capture-btn');
+        const retakeBtn = containerElement.querySelector('#retake-btn');
+        const stopBtn = containerElement.querySelector('#stop-camera-btn');
+        const statusText = containerElement.querySelector('#camera-status-text');
+        const galleryInput = containerElement.querySelector('#gallery-input');
+        const galleryBtn = containerElement.querySelector('#gallery-btn');
+
+        // Helper function to handle captured photo
+        const handlePhotoCapture = (imageDataUrl) => {
+            try {
+                // Convert to blob
+                const photoFile = this.dataURLtoFile(imageDataUrl, 'captured-photo.jpg');
+                
+                // Check file size
+                if (photoFile.size > maxSize) {
+                    const maxSizeMB = maxSize / (1024 * 1024);
+                    throw new Error(`Ukuran foto terlalu besar. Maksimal ${maxSizeMB}MB`);
+                }
+
+                // Show captured image
+                capturedImage.src = imageDataUrl;
+                capturedImage.style.display = 'block';
+                video.style.display = 'none';
+                
+                captureBtn.style.display = 'none';
+                retakeBtn.style.display = 'inline-flex';
+                
+                statusText.textContent = 'Foto berhasil diambil!';
+
+                // Call onCapture callback with blob
+                if (onCapture) {
+                    // Convert file to blob
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const arrayBuffer = e.target.result;
+                        const blob = new Blob([arrayBuffer], { type: photoFile.type });
+                        onCapture(blob);
+                    };
+                    reader.readAsArrayBuffer(photoFile);
+                }
+            } catch (error) {
+                statusText.textContent = `Error: ${error.message}`;
+                if (onError) {
+                    onError(error);
+                }
+            }
+        };
 
         // Event handlers
         startBtn.onclick = async () => {
@@ -239,26 +295,21 @@ class CameraUtils {
                 statusText.textContent = 'Kamera aktif - Klik "Ambil Foto" untuk mengambil gambar';
             } catch (error) {
                 statusText.textContent = `Error: ${error.message}`;
-                console.error('Camera start error:', error);
+                if (onError) {
+                    onError(error);
+                }
             }
         };
 
         captureBtn.onclick = () => {
             try {
                 const imageData = this.capturePhoto(video, canvas);
-                
-                // Show captured image
-                capturedImage.src = imageData;
-                capturedImage.style.display = 'block';
-                video.style.display = 'none';
-                
-                captureBtn.style.display = 'none';
-                retakeBtn.style.display = 'inline-flex';
-                
-                statusText.textContent = 'Foto berhasil diambil!';
+                handlePhotoCapture(imageData);
             } catch (error) {
                 statusText.textContent = `Error: ${error.message}`;
-                console.error('Capture error:', error);
+                if (onError) {
+                    onError(error);
+                }
             }
         };
 
@@ -290,6 +341,39 @@ class CameraUtils {
             statusText.textContent = 'Klik "Mulai Kamera" untuk mengambil foto';
         };
 
+        // Gallery input handler (if enabled)
+        if (allowGallery && galleryInput && galleryBtn) {
+            galleryBtn.onclick = () => {
+                galleryInput.click();
+            };
+
+            galleryInput.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Check file type
+                    if (!file.type.startsWith('image/')) {
+                        statusText.textContent = 'File yang dipilih bukan gambar';
+                        return;
+                    }
+
+                    // Check file size
+                    if (file.size > maxSize) {
+                        const maxSizeMB = maxSize / (1024 * 1024);
+                        statusText.textContent = `Ukuran foto terlalu besar. Maksimal ${maxSizeMB}MB`;
+                        return;
+                    }
+
+                    // Convert file to data URL and handle
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        handlePhotoCapture(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+
+        // Return camera instance object
         return {
             video,
             canvas,
@@ -298,8 +382,33 @@ class CameraUtils {
             captureBtn,
             retakeBtn,
             stopBtn,
-            statusText
+            galleryBtn,
+            statusText,
+            container: containerElement,
+            // Methods
+            start: () => startBtn.click(),
+            capture: () => captureBtn.click(),
+            retake: () => retakeBtn.click(),
+            stop: () => stopBtn.click(),
+            // Cleanup method
+            cleanup: () => {
+                this.stopCamera();
+                this.clearCapturedPhoto();
+            }
         };
+    }
+
+    // Initialize camera with UI controls (legacy method - takes container ID)
+    async initializeCameraUI(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+            throw new Error(`Container dengan ID '${containerId}' tidak ditemukan`);
+        }
+
+        // Use the new initCamera method
+        return await this.initCamera(container, {
+            allowGallery: true
+        });
     }
 
     // Cleanup when component is destroyed
