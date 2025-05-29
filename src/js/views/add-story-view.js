@@ -122,7 +122,7 @@ class AddStoryView {
                 </div>
 
                 <!-- Preview Section -->
-                <div id="story-preview" class="card hidden">
+                <div id="story-preview" class="card hidden mt-4">
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-eye" aria-hidden="true"></i>

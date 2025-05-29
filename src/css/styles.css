@@ -73,6 +73,7 @@ body {
 
 .navbar {
     padding: 1rem 0;
+    z-index: 1000;
 }
 
 .nav-container {
@@ -381,6 +382,8 @@ body {
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     margin-bottom: 2rem;
+    z-index: 1;
+    position: relative;
 }
 
 .map-placeholder {

@@ -86,10 +86,6 @@ class HomeView {
                                     <i class="fas fa-crosshairs" aria-hidden="true"></i>
                                     Lokasi Saya
                                 </button>
-                                <button class="btn btn-secondary" id="fit-markers">
-                                    <i class="fas fa-expand" aria-hidden="true"></i>
-                                    Tampilkan Semua
-                                </button>
                             </div>
                         </div>
                         <div class="card-body">
