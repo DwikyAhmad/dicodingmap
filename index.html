@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicoding Stories - Bagikan Cerita Anda</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
+    
+    <!-- Font Awesome untuk icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- CSS utama -->
+    <link rel="stylesheet" href="src/css/styles.css">
+    
+    <!-- View Transition API -->
+    <meta name="view-transition" content="same-origin">
+</head>
+<body>
+    <!-- Skip to content untuk aksesibilitas -->
+    <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
+    
+    <!-- Header -->
+    <header role="banner" class="header">
+        <nav role="navigation" class="navbar">
+            <div class="nav-container">
+                <h1 class="brand">
+                    <i class="fas fa-book-open" aria-hidden="true"></i>
+                    Dicoding Stories
+                </h1>
+                <div class="nav-links">
+                    <a href="#home" class="nav-link" id="home-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        Beranda
+                    </a>
+                    <a href="#add-story" class="nav-link" id="add-story-link">
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                        Tambah Story
+                    </a>
+                    <button class="nav-link auth-btn" id="auth-btn">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span id="auth-text">Masuk</span>
+                    </button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Loading indicator -->
+    <div class="loading" id="loading" role="status" aria-label="Memuat">
+        <div class="loading-spinner"></div>
+        <p>Memuat...</p>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" role="main" class="main-content">
+        <div id="page-content"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo" class="footer">
+        <div class="footer-content">
+            <p>Dicoding Stories</p>
+        </div>
+    </footer>
+
+    <!-- Modal untuk notifikasi -->
+    <div class="modal" id="notification-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Notifikasi</h2>
+                <button class="modal-close" id="modal-close" aria-label="Tutup modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="modal-ok">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+            crossorigin=""></script>
+    
+    <!-- App JS -->
+    <script src="src/js/utils/api.js"></script>
+    <script src="src/js/utils/auth.js"></script>
+    <script src="src/js/utils/camera.js"></script>
+    <script src="src/js/utils/map.js"></script>
+    <script src="src/js/utils/notification.js"></script>
+    
+    <script src="src/js/models/story-model.js"></script>
+    <script src="src/js/models/auth-model.js"></script>
+    
+    <script src="src/js/views/home-view.js"></script>
+    <script src="src/js/views/add-story-view.js"></script>
+    <script src="src/js/views/auth-view.js"></script>
+    
+    <script src="src/js/presenters/home-presenter.js"></script>
+    <script src="src/js/presenters/add-story-presenter.js"></script>
+    <script src="src/js/presenters/auth-presenter.js"></script>
+    
+    <script src="src/js/router.js"></script>
+    <script src="src/js/app.js"></script>
+</body>
+</html> 

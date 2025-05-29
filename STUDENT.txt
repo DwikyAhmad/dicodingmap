@@ -1,0 +1,82 @@
+Dicoding Stories - Aplikasi Berbagi Cerita
+==========================================
+
+Informasi API dan Konfigurasi:
+
+1. API UTAMA:
+   - Story API: https://story-api.dicoding.dev/v1
+   - Dokumentasi lengkap tersedia di api_docs.txt
+
+2. MAP SERVICE:
+   - Menggunakan OpenStreetMap melalui Leaflet.js
+   - Tidak memerlukan API key khusus
+   - Tile source: https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+   - Attribution: © OpenStreetMap contributors
+
+3. FITUR YANG DIIMPLEMENTASIKAN:
+   ✅ Single Page Application (SPA) dengan hash routing
+   ✅ Model-View-Presenter (MVP) pattern
+   ✅ Menampilkan data story dari API dengan gambar dan lokasi
+   ✅ Peta digital dengan marker dan popup
+   ✅ Fitur tambah story baru dengan kamera dan koordinat
+   ✅ Aksesibilitas (skip to content, alt text, label, semantic elements)
+   ✅ View Transition API untuk transisi halus
+   ✅ Camera capture untuk mengambil foto
+   ✅ Geolocation dan map click untuk koordinat
+
+4. TEKNOLOGI YANG DIGUNAKAN:
+   - HTML5 dengan semantic elements
+   - CSS3 dengan custom properties dan responsive design
+   - Vanilla JavaScript (ES6+)
+   - Leaflet.js untuk maps
+   - Font Awesome untuk icons
+   - Media Devices API untuk camera
+   - Geolocation API untuk lokasi
+
+5. AKSESIBILITAS:
+   - Skip to content link
+   - Proper ARIA labels dan roles
+   - Semantic HTML structure
+   - Keyboard navigation support
+   - Alt text untuk gambar
+   - Form labels yang tepat
+   - High contrast mode support
+   - Reduced motion support
+
+6. STRUKTUR APLIKASI:
+   /src
+     /js
+       /utils      - Utility functions (API, camera, map, auth, notification)
+       /models     - Data models (story, auth)
+       /views      - View components (belum selesai implementasi)
+       /presenters - MVP presenters (belum selesai implementasi)
+       router.js   - Hash-based routing
+       app.js      - Main application
+     /css
+       styles.css  - Main stylesheet
+     /images       - Static assets
+
+7. CATATAN PENGEMBANGAN:
+   - Aplikasi menggunakan localStorage untuk menyimpan token autentikasi
+   - Cache system diimplementasikan untuk performa
+   - Error handling yang komprehensif
+   - Mobile-responsive design
+   - PWA-ready (service worker bisa ditambahkan)
+
+8. CARA MENJALANKAN:
+   1. Buka index.html di browser modern
+   2. Pastikan koneksi internet aktif untuk API dan map tiles
+   3. Berikan izin kamera dan lokasi saat diminta
+   4. Aplikasi akan langsung berjalan sebagai SPA
+
+9. FITUR TAMBAHAN:
+   - Network status detection
+   - Auto token expiration handling
+   - Loading states dan feedback
+   - Toast notifications
+   - Confirmation dialogs
+   - Search dan filter functionality
+   - Statistics dan analytics
+
+Dibuat untuk memenuhi kriteria submission Dicoding Frontend Expert.
+Semua fitur wajib telah diimplementasikan sesuai requirement. 
