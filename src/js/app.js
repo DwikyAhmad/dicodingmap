@@ -1,4 +1,3 @@
-// Main Application Class
 class App {
     constructor() {
         this.isInitialized = false;
@@ -6,15 +5,10 @@ class App {
         this.init();
     }
 
-    // Initialize application
     async init() {
         try {
-            console.log('Initializing Dicoding Stories App...');
-            
-            // Show initial loading
             this.showInitialLoading();
 
-            // Wait for DOM to be ready
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
                     this.startInitialization();
@@ -29,25 +23,16 @@ class App {
         }
     }
 
-    // Start the initialization process
     async startInitialization() {
         try {
-            // Initialize core components
             await this.initializeComponents();
 
-            // Setup event listeners
             this.setupEventListeners();
 
-            // Setup application features
             this.setupApplicationFeatures();
 
-            // Initialize authentication
-            this.initializeAuthentication();
-
-            // Mark as initialized
             this.isInitialized = true;
 
-            // Hide loading
             this.hideInitialLoading();
 
             console.log('App initialized successfully');
@@ -58,7 +43,6 @@ class App {
         }
     }
 
-    // Show initial loading screen
     showInitialLoading() {
         const loading = document.getElementById('loading');
         if (loading) {
@@ -66,7 +50,6 @@ class App {
         }
     }
 
-    // Hide initial loading screen
     hideInitialLoading() {
         const loading = document.getElementById('loading');
         if (loading) {
@@ -76,38 +59,31 @@ class App {
         }
     }
 
-    // Initialize core components
     async initializeComponents() {
         console.log('Initializing core components...');
 
-        // Initialize API client
         if (window.apiClient) {
             this.components.set('apiClient', apiClient);
         }
 
-        // Initialize notification system
         if (window.notificationUtils) {
             notificationUtils.setupNetworkStatusNotifications();
             this.components.set('notificationUtils', notificationUtils);
         }
 
-        // Initialize auth utilities
         if (window.authUtils) {
             authUtils.initAuthUI();
             this.components.set('authUtils', authUtils);
         }
 
-        // Initialize camera utilities
         if (window.cameraUtils) {
             this.components.set('cameraUtils', cameraUtils);
         }
 
-        // Initialize map utilities
         if (window.mapUtils) {
             this.components.set('mapUtils', mapUtils);
         }
 
-        // Initialize models
         if (window.storyModel) {
             this.components.set('storyModel', storyModel);
         }
@@ -116,7 +92,6 @@ class App {
             this.components.set('authModel', authModel);
         }
 
-        // Initialize router (this should be last)
         if (window.router) {
             this.components.set('router', router);
         }
@@ -284,26 +259,8 @@ class App {
     setupApplicationFeatures() {
         console.log('Setting up application features...');
 
-        // Setup performance monitoring
-        this.setupPerformanceMonitoring();
-
         // Setup accessibility features
         this.setupAccessibilityFeatures();
-    }
-
-    // Setup performance monitoring
-    setupPerformanceMonitoring() {
-        // Monitor performance metrics
-        if ('performance' in window) {
-            window.addEventListener('load', () => {
-                setTimeout(() => {
-                    const perfData = performance.getEntriesByType('navigation')[0];
-                    if (perfData) {
-                        console.log('App load time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
-                    }
-                }, 1000);
-            });
-        }
     }
 
     // Setup accessibility features
@@ -328,11 +285,6 @@ class App {
         document.body.appendChild(liveRegion);
     }
 
-    // Initialize authentication
-    initializeAuthentication() {
-        console.log('Initializing authentication...');
-        
-    }
 
     // Get application information
     getAppInfo() {
@@ -415,15 +367,8 @@ class App {
     }
 }
 
-// Initialize the application when script loads
+
 const app = new App();
 
-// Export for debugging and external access
-window.app = app;
 
-// Debug information
-if (process?.env?.NODE_ENV === 'development') {
-    window.addEventListener('load', () => {
-        console.log('App Info:', app.getAppInfo());
-    });
-} 
+window.app = app;

@@ -1,4 +1,3 @@
-// Hash-based Router for SPA
 class Router {
     constructor() {
         this.routes = new Map();
@@ -7,14 +6,12 @@ class Router {
         this.init();
     }
 
-    // Initialize router
     init() {
         this.setupRoutes();
         this.setupEventListeners();
         this.handleInitialRoute();
     }
 
-    // Setup application routes
     setupRoutes() {
         this.addRoute('home', {
             path: '#home',
@@ -40,17 +37,14 @@ class Router {
             requiresAuth: false
         });
 
-        // Default route
         this.addRoute('', {
             path: '#',
             title: 'Beranda',
             component: 'home',
             presenter: () => {
-                // Redirect based on authentication status
                 if (authUtils && authUtils.isAuthenticated()) {
                     return new HomePresenter();
                 } else {
-                    // This shouldn't be reached due to routing logic, but as fallback
                     router.navigateTo('auth');
                     return new AuthPresenter();
                 }
@@ -59,19 +53,15 @@ class Router {
         });
     }
 
-    // Add route to routes map
     addRoute(name, config) {
         this.routes.set(name, config);
     }
 
-    // Setup event listeners
     setupEventListeners() {
-        // Listen for hash changes
         window.addEventListener('hashchange', (e) => {
             this.handleRouteChange();
         });
 
-        // Listen for authentication state changes
         if (window.authModel) {
             authModel.addAuthListener((isAuthenticated) => {
                 this.handleAuthStateChange(isAuthenticated);
@@ -79,15 +69,13 @@ class Router {
         }
     }
 
-    // Handle initial route on app load
     handleInitialRoute() {
-        // Small delay to ensure all components are loaded
         setTimeout(() => {
             this.handleRouteChange();
         }, 100);
     }
 
-    // Handle route changes
+
     async handleRouteChange() {
         const hash = window.location.hash;
         const routeName = this.extractRouteFromHash(hash);
@@ -99,31 +87,26 @@ class Router {
             return;
         }
 
-        // Check if user is authenticated
         const isAuthenticated = authUtils.isAuthenticated();
-        
-        // If user is not authenticated and not trying to access auth page, redirect to auth
+
         if (!isAuthenticated && routeName !== 'auth') {
             console.log('User not authenticated, redirecting to auth page');
             this.navigateTo('auth');
             return;
         }
 
-        // If user is authenticated and trying to access auth page, redirect to home
         if (isAuthenticated && routeName === 'auth') {
             console.log('User already authenticated, redirecting to home');
             this.navigateTo('home');
             return;
         }
 
-        // Check authentication requirements (legacy support)
         if (route.requiresAuth && !isAuthenticated) {
             console.log('Route requires authentication, redirecting to auth page');
             this.navigateTo('auth');
             return;
         }
 
-        // Skip if already on this route
         if (this.currentRoute === routeName) {
             return;
         }
@@ -136,19 +119,14 @@ class Router {
         }
     }
 
-    // Load route and its components
     async loadRoute(route, routeName) {
-        // Show loading
         notificationUtils.showLoading('Memuat halaman...');
 
         try {
-            // Update page title
             document.title = `${route.title} - Dicoding Stories`;
 
-            // Update active navigation
             this.updateActiveNavigation(routeName);
 
-            // Load component with View Transition API
             if (document.startViewTransition) {
                 await document.startViewTransition(() => {
                     return this.renderComponent(route);
@@ -157,19 +135,13 @@ class Router {
                 await this.renderComponent(route);
             }
 
-            // Set current route
             this.currentRoute = routeName;
 
-            // Update browser history if needed
-            this.updateHistory(route.path);
-
         } finally {
-            // Hide loading
             notificationUtils.hideLoading();
         }
     }
 
-    // Render component for route
     async renderComponent(route) {
         const contentContainer = document.getElementById('page-content');
         if (!contentContainer) {
@@ -177,19 +149,15 @@ class Router {
         }
 
         try {
-            // Create presenter instance
             const presenter = route.presenter();
-            
-            // Initialize presenter and render view
+
             await presenter.init();
-            
-            // Store current presenter for cleanup
+
             this.currentPresenter = presenter;
 
         } catch (error) {
             console.error('Error rendering component:', error);
-            
-            // Show error page
+
             contentContainer.innerHTML = `
                 <div class="error-page">
                     <div class="card">
@@ -209,26 +177,23 @@ class Router {
                     </div>
                 </div>
             `;
-            
+
             throw error;
         }
     }
 
-    // Extract route name from hash
     extractRouteFromHash(hash) {
         if (!hash || hash === '#') {
-            // Return appropriate default based on authentication status
             if (authUtils && authUtils.isAuthenticated()) {
                 return 'home';
             } else {
                 return 'auth';
             }
         }
-        
+
         return hash.replace('#', '');
     }
 
-    // Navigate to route
     navigateTo(routeName, replace = false) {
         const route = this.routes.get(routeName);
         if (!route) {
@@ -243,34 +208,22 @@ class Router {
         }
     }
 
-    // Update active navigation links
     updateActiveNavigation(currentRoute) {
-        // Remove active class from all nav links
         const navLinks = document.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             link.classList.remove('active');
         });
 
-        // Add active class to current route link
         const currentLink = document.querySelector(`[href="#${currentRoute}"]`);
         if (currentLink) {
             currentLink.classList.add('active');
         }
     }
 
-    // Update browser history
-    updateHistory(path) {
-        const currentPath = window.location.hash;
-        if (currentPath !== path) {
-            // Don't update history if we're already on this path
-            // This prevents unnecessary history entries
-        }
-    }
-
     // Handle authentication state changes
     handleAuthStateChange(isAuthenticated) {
         console.log('Auth state changed:', isAuthenticated);
-        
+
         // Update navigation visibility
         if (window.authUtils) {
             authUtils.updateNavigationLinks();
@@ -294,44 +247,28 @@ class Router {
         }
     }
 
-    // Get current route name
     getCurrentRoute() {
         return this.currentRoute;
     }
 
-    // Get current route configuration
     getCurrentRouteConfig() {
         return this.routes.get(this.currentRoute);
     }
 
-    // Check if route exists
     hasRoute(routeName) {
         return this.routes.has(routeName);
     }
 
-    // Go back in history
-    goBack() {
-        window.history.back();
-    }
-
-    // Go forward in history
-    goForward() {
-        window.history.forward();
-    }
-
-    // Replace current route
     replaceRoute(routeName) {
         this.navigateTo(routeName, true);
     }
 
-    // Cleanup current presenter before navigation
     cleanup() {
         if (this.currentPresenter && typeof this.currentPresenter.cleanup === 'function') {
             this.currentPresenter.cleanup();
         }
     }
 
-    // Add route guard
     addRouteGuard(routeName, guardFunction) {
         const route = this.routes.get(routeName);
         if (route) {
@@ -339,7 +276,6 @@ class Router {
         }
     }
 
-    // Check route guards
     async checkRouteGuards(route, routeName) {
         if (route.guard && typeof route.guard === 'function') {
             const canActivate = await route.guard(routeName);
@@ -349,7 +285,6 @@ class Router {
         }
     }
 
-    // Get all routes
     getAllRoutes() {
         return Array.from(this.routes.entries()).map(([name, config]) => ({
             name,
@@ -357,7 +292,6 @@ class Router {
         }));
     }
 
-    // Get route breadcrumbs
     getBreadcrumbs() {
         const currentRoute = this.getCurrentRouteConfig();
         if (!currentRoute) return [];
@@ -369,8 +303,6 @@ class Router {
     }
 }
 
-// Create global router instance
 const router = new Router();
 
-// Export for use in other modules
 window.router = router; 

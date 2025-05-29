@@ -40,43 +40,6 @@ class HomeView {
                     </div>
                 </header>
 
-                <!-- Search and Filter Section -->
-                <section class="search-section" aria-label="Pencarian dan Filter">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="search-controls">
-                                <div class="form-group">
-                                    <label for="story-search" class="form-label">Cari Story</label>
-                                    <div class="search-input-wrapper">
-                                        <input 
-                                            type="search" 
-                                            id="story-search" 
-                                            class="form-control" 
-                                            placeholder="Cari berdasarkan nama atau deskripsi..."
-                                            autocomplete="off"
-                                        >
-                                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="filter-controls">
-                                    <button class="btn btn-secondary filter-btn active" data-filter="all">
-                                        <i class="fas fa-list" aria-hidden="true"></i>
-                                        Semua
-                                    </button>
-                                    <button class="btn btn-secondary filter-btn" data-filter="with-location">
-                                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                                        Dengan Lokasi
-                                    </button>
-                                    <button class="btn btn-secondary filter-btn" data-filter="without-location">
-                                        <i class="fas fa-image" aria-hidden="true"></i>
-                                        Tanpa Lokasi
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 <!-- Stories Statistics -->
                 <section class="stats-section" aria-label="Statistik Stories">
                     <div class="stats-grid">
@@ -136,7 +99,7 @@ class HomeView {
                 </section>
 
                 <!-- Stories Grid Section -->
-                <section class="stories-section" aria-label="Daftar Stories">
+                <section class="stories-section mt-4" aria-label="Daftar Stories">
                     <div class="section-header">
                         <h2 class="section-title">
                             <i class="fas fa-list" aria-hidden="true"></i>
@@ -152,41 +115,10 @@ class HomeView {
                         </div>
                     </div>
                     
-                    <!-- Loading state -->
-                    <div id="stories-loading" class="loading-stories hidden">
-                        <div class="loading-spinner"></div>
-                        <p>Memuat stories...</p>
-                    </div>
 
                     <!-- Stories grid -->
                     <div id="stories-grid" class="stories-grid" role="region" aria-label="Grid stories">
                         <!-- Stories will be populated here -->
-                    </div>
-
-                    <!-- Empty state -->
-                    <div id="stories-empty" class="empty-state hidden">
-                        <div class="empty-content">
-                            <i class="fas fa-book-open empty-icon" aria-hidden="true"></i>
-                            <h3>Belum Ada Stories</h3>
-                            <p>Belum ada stories yang ditemukan. Jadilah yang pertama membagikan cerita!</p>
-                            <a href="#add-story" class="btn btn-primary">
-                                <i class="fas fa-plus" aria-hidden="true"></i>
-                                Tambah Story Pertama
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- No results state -->
-                    <div id="stories-no-results" class="empty-state hidden">
-                        <div class="empty-content">
-                            <i class="fas fa-search empty-icon" aria-hidden="true"></i>
-                            <h3>Tidak Ada Hasil</h3>
-                            <p>Tidak ditemukan stories yang sesuai dengan pencarian Anda.</p>
-                            <button class="btn btn-secondary" id="clear-search">
-                                <i class="fas fa-times" aria-hidden="true"></i>
-                                Hapus Pencarian
-                            </button>
-                        </div>
                     </div>
                 </section>
             </div>
@@ -333,6 +265,15 @@ class HomeView {
         
         if (storiesGrid) {
             storiesGrid.innerHTML = '';
+        }
+    }
+
+    // Hide loading state
+    hideLoading() {
+        const storiesLoading = document.getElementById('stories-loading');
+        
+        if (storiesLoading) {
+            storiesLoading.classList.add('hidden');
         }
     }
 

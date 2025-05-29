@@ -20,25 +20,6 @@ class AuthView {
 
                 <!-- Auth Forms Container -->
                 <div class="auth-container">
-                    <!-- Mode Switcher -->
-                    <div class="auth-mode-switcher">
-                        <button type="button" 
-                                class="mode-btn active" 
-                                id="login-mode-btn"
-                                data-mode="login"
-                                aria-pressed="true">
-                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                            Masuk
-                        </button>
-                        <button type="button" 
-                                class="mode-btn" 
-                                id="register-mode-btn"
-                                data-mode="register"
-                                aria-pressed="false">
-                            <i class="fas fa-user-plus" aria-hidden="true"></i>
-                            Daftar
-                        </button>
-                    </div>
 
                     <!-- Login Form -->
                     <div id="login-form-container" class="auth-form-container active">
@@ -53,11 +34,13 @@ class AuthView {
                             <div class="card-body">
                                 <!-- Email Field -->
                                 <div class="form-group">
-                                    <label for="login-email" class="form-label">
-                                        Email *
-                                    </label>
-                                    <div class="form-input-group">
+                                    <div class="flex items-center gap-2">
                                         <i class="fas fa-envelope form-icon" aria-hidden="true"></i>
+                                        <label for="login-email" class="form-label">
+                                        Email *
+                                        </label>
+                                    </div>
+                                    <div class="form-input-group">
                                         <input type="email" 
                                                id="login-email" 
                                                name="email"
@@ -75,11 +58,14 @@ class AuthView {
 
                                 <!-- Password Field -->
                                 <div class="form-group">
-                                    <label for="login-password" class="form-label">
-                                        Password *
-                                    </label>
-                                    <div class="form-input-group">
+                                    <div class="flex items-center gap-2">
                                         <i class="fas fa-lock form-icon" aria-hidden="true"></i>
+                                        <label for="login-password" class="form-label">
+                                            Password *
+                                        </label>
+                                    </div>
+                                    <div class="form-input-group">
+                                        
                                         <input type="password" 
                                                id="login-password" 
                                                name="password"
@@ -89,12 +75,6 @@ class AuthView {
                                                minlength="8"
                                                autocomplete="current-password"
                                                aria-describedby="login-password-help">
-                                        <button type="button" 
-                                                class="password-toggle" 
-                                                id="login-password-toggle"
-                                                aria-label="Tampilkan/sembunyikan password">
-                                            <i class="fas fa-eye" aria-hidden="true"></i>
-                                        </button>
                                     </div>
                                     <div id="login-password-help" class="form-help">
                                         Password minimal 8 karakter
@@ -110,15 +90,6 @@ class AuthView {
                                     </button>
                                 </div>
 
-                                <!-- Alternative Actions -->
-                                <div class="form-alternatives">
-                                    <p class="text-center">
-                                        Belum punya akun? 
-                                        <button type="button" class="btn btn-link" id="switch-to-register">
-                                            Daftar di sini
-                                        </button>
-                                    </p>
-                                </div>
                             </div>
                         </form>
                     </div>
@@ -136,11 +107,13 @@ class AuthView {
                             <div class="card-body">
                                 <!-- Name Field -->
                                 <div class="form-group">
-                                    <label for="register-name" class="form-label">
-                                        Nama Lengkap *
-                                    </label>
-                                    <div class="form-input-group">
+                                    <div class="flex items-center gap-2">
                                         <i class="fas fa-user form-icon" aria-hidden="true"></i>
+                                        <label for="register-name" class="form-label">
+                                            Nama Lengkap *
+                                        </label>
+                                    </div>
+                                    <div class="form-input-group">
                                         <input type="text" 
                                                id="register-name" 
                                                name="name"
@@ -160,11 +133,13 @@ class AuthView {
 
                                 <!-- Email Field -->
                                 <div class="form-group">
-                                    <label for="register-email" class="form-label">
-                                        Email *
-                                    </label>
-                                    <div class="form-input-group">
+                                    <div class="flex items-center gap-2">
                                         <i class="fas fa-envelope form-icon" aria-hidden="true"></i>
+                                        <label for="register-email" class="form-label">
+                                            Email *
+                                        </label>
+                                    </div>
+                                    <div class="form-input-group">
                                         <input type="email" 
                                                id="register-email" 
                                                name="email"
@@ -182,11 +157,13 @@ class AuthView {
 
                                 <!-- Password Field -->
                                 <div class="form-group">
-                                    <label for="register-password" class="form-label">
-                                        Password *
-                                    </label>
-                                    <div class="form-input-group">
+                                    <div class="flex items-center gap-2">
                                         <i class="fas fa-lock form-icon" aria-hidden="true"></i>
+                                        <label for="register-password" class="form-label">
+                                            Password *
+                                        </label>
+                                    </div>
+                                    <div class="form-input-group">
                                         <input type="password" 
                                                id="register-password" 
                                                name="password"
@@ -196,12 +173,6 @@ class AuthView {
                                                minlength="8"
                                                autocomplete="new-password"
                                                aria-describedby="register-password-help">
-                                        <button type="button" 
-                                                class="password-toggle" 
-                                                id="register-password-toggle"
-                                                aria-label="Tampilkan/sembunyikan password">
-                                            <i class="fas fa-eye" aria-hidden="true"></i>
-                                        </button>
                                     </div>
                                     <div id="register-password-help" class="form-help">
                                         Password minimal 8 karakter dengan kombinasi huruf dan angka
@@ -216,42 +187,10 @@ class AuthView {
                                         <span id="register-submit-text">Daftar</span>
                                     </button>
                                 </div>
-
-                                <!-- Alternative Actions -->
-                                <div class="form-alternatives">
-                                    <p class="text-center">
-                                        Sudah punya akun? 
-                                        <button type="button" class="btn btn-link" id="switch-to-login">
-                                            Masuk di sini
-                                        </button>
-                                    </p>
-                                </div>
                             </div>
                         </form>
                     </div>
 
-                    <!-- Guest Access Section -->
-                    <div class="guest-access-section">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    <i class="fas fa-user-secret" aria-hidden="true"></i>
-                                    Akses Tanpa Registrasi
-                                </h3>
-                            </div>
-                            <div class="card-body">
-                                <p class="text-center">
-                                    Anda dapat menambahkan story tanpa perlu registrasi sebagai guest user
-                                </p>
-                                <div class="form-actions">
-                                    <button type="button" class="btn btn-secondary btn-block" id="continue-as-guest">
-                                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                                        Lanjutkan sebagai Guest
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         `;
@@ -269,22 +208,22 @@ class AuthView {
     // Setup password visibility toggles
     setupPasswordToggles() {
         const toggles = ['login-password-toggle', 'register-password-toggle'];
-        
+
         toggles.forEach(toggleId => {
             const toggle = document.getElementById(toggleId);
             const input = document.getElementById(toggleId.replace('-toggle', ''));
-            
+
             if (toggle && input) {
                 toggle.addEventListener('click', () => {
                     const isPassword = input.type === 'password';
                     input.type = isPassword ? 'text' : 'password';
-                    
+
                     const icon = toggle.querySelector('i');
                     if (icon) {
                         icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
                     }
-                    
-                    toggle.setAttribute('aria-label', 
+
+                    toggle.setAttribute('aria-label',
                         isPassword ? 'Sembunyikan password' : 'Tampilkan password'
                     );
                 });
@@ -356,7 +295,7 @@ class AuthView {
         if (mode === 'login') {
             loginContainer.classList.add('active');
             registerContainer.classList.remove('active');
-            
+
             // Focus first input
             setTimeout(() => {
                 const firstInput = document.getElementById('login-email');
@@ -365,7 +304,7 @@ class AuthView {
         } else {
             loginContainer.classList.remove('active');
             registerContainer.classList.add('active');
-            
+
             // Focus first input
             setTimeout(() => {
                 const firstInput = document.getElementById('register-name');
@@ -470,7 +409,7 @@ class AuthView {
     showFieldError(fieldId, message) {
         const field = document.getElementById(fieldId);
         const errorElement = document.getElementById(`${fieldId}-error`);
-        
+
         if (field && errorElement) {
             field.classList.add('error');
             field.setAttribute('aria-invalid', 'true');
@@ -483,7 +422,7 @@ class AuthView {
     clearFieldError(fieldId) {
         const field = document.getElementById(fieldId);
         const errorElement = document.getElementById(`${fieldId}-error`);
-        
+
         if (field && errorElement) {
             field.classList.remove('error');
             field.setAttribute('aria-invalid', 'false');
@@ -496,12 +435,12 @@ class AuthView {
     clearAllErrors() {
         const errorElements = document.querySelectorAll('.form-error');
         const inputElements = document.querySelectorAll('.form-control');
-        
+
         errorElements.forEach(element => {
             element.textContent = '';
             element.style.display = 'none';
         });
-        
+
         inputElements.forEach(element => {
             element.classList.remove('error');
             element.setAttribute('aria-invalid', 'false');
@@ -529,7 +468,7 @@ class AuthView {
     showLoadingState(mode = this.currentMode) {
         const submitBtn = document.getElementById(`${mode}-submit-btn`);
         const submitText = document.getElementById(`${mode}-submit-text`);
-        
+
         if (submitBtn && submitText) {
             submitBtn.disabled = true;
             submitText.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Memproses...';
@@ -540,7 +479,7 @@ class AuthView {
     hideLoadingState(mode = this.currentMode) {
         const submitBtn = document.getElementById(`${mode}-submit-btn`);
         const submitText = document.getElementById(`${mode}-submit-text`);
-        
+
         if (submitBtn && submitText) {
             submitBtn.disabled = false;
             if (mode === 'login') {
@@ -557,13 +496,13 @@ class AuthView {
             document.getElementById('login-email').value = '';
             document.getElementById('login-password').value = '';
         }
-        
+
         if (mode === 'register' || mode === 'both') {
             document.getElementById('register-name').value = '';
             document.getElementById('register-email').value = '';
             document.getElementById('register-password').value = '';
         }
-        
+
         this.clearAllErrors();
     }
 

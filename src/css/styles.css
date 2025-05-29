@@ -506,6 +506,22 @@ body {
     margin-bottom: 2rem;
 }
 
+.flex {
+    display: flex;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
 .page-title {
     font-size: 2rem;
     font-weight: 700;
@@ -521,6 +537,12 @@ body {
 .auth-form {
     max-width: 400px;
     margin: 2rem auto;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 .auth-tabs {

@@ -165,18 +165,23 @@ class HomePresenter {
             this.view.showLoading();
 
             // Fetch stories from model
+            console.log('Calling model.getStories...');
             const stories = await this.model.getStories(forceRefresh);
+            console.log('Stories received from model:', stories);
 
             // Process and display stories
+            console.log('Displaying stories...');
             this.displayStories(stories);
 
             // Update statistics
+            console.log('Updating statistics...');
             this.updateStatistics(stories);
 
             // Update map with stories
+            console.log('Updating map...');
             this.updateMap(stories);
 
-            console.log(`Loaded ${stories.length} stories`);
+            console.log(`Loaded ${stories.length} stories successfully`);
 
         } catch (error) {
             console.error('Error loading stories:', error);
@@ -184,6 +189,10 @@ class HomePresenter {
             
             // Show empty state on error
             this.view.renderStoriesGrid([]);
+        } finally {
+            // Always hide loading state
+            console.log('Hiding loading state...');
+            this.view.hideLoading();
         }
     }
 

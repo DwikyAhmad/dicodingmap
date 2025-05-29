@@ -25,7 +25,29 @@ class StoryModel {
 
         try {
             this.isLoading = true;
-            const response = await apiClient.getStories(1, 50, 1); // Get first 50 stories with location
+            console.log('API call - attempting to get stories...');
+            
+            let response;
+            
+            // Check if user is authenticated
+            if (authUtils && authUtils.isAuthenticated()) {
+                console.log('User is authenticated, calling authenticated API');
+                response = await apiClient.getStories(1, 50, 1); // Get first 50 stories with location
+            } else {
+                console.log('User is not authenticated, calling guest API');
+                // For guest users, we'll try without auth first
+                try {
+                    response = await apiClient.request('/stories?page=1&size=50&location=1', {
+                        includeAuth: false
+                    });
+                } catch (guestError) {
+                    console.log('Guest API failed, trying with default auth');
+                    // If guest fails, try with whatever token we have (might be null)
+                    response = await apiClient.getStories(1, 50, 1);
+                }
+            }
+            
+            console.log('API response received:', response);
             
             if (response && response.listStory) {
                 this.stories = response.listStory;
@@ -36,12 +58,20 @@ class StoryModel {
                     data: this.stories,
                     timestamp: now
                 });
+                
+                console.log(`Successfully loaded ${this.stories.length} stories`);
+            } else {
+                console.log('No stories found in response');
+                this.stories = [];
             }
 
             return this.stories;
         } catch (error) {
             console.error('Error fetching stories:', error);
-            throw error;
+            
+            // Return empty array on error instead of throwing
+            this.stories = [];
+            return this.stories;
         } finally {
             this.isLoading = false;
         }
